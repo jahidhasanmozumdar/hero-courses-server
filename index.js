@@ -10,7 +10,7 @@ const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 app.use(cors());
 app.use(express.json());
 
-const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.bwe3hjc.mongodb.net/?retryWrites=true&w=majority`;
+const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.qtkkwyv.mongodb.net/?retryWrites=true&w=majority`;
 const client = new MongoClient(uri, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
@@ -24,7 +24,14 @@ async function run() {
     await client.connect();
 
     app.get("/course", async (req, res) => {
-      const result = await billCollection.find({}).toArray();
+      const result = await courses.find({}).toArray();
+      res.send(result);
+    });
+
+    app.get("/course/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: ObjectId(id) };
+      const result = await courses.findOne(query);
       res.send(result);
     });
   } finally {
